@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reproductor de Vimeo Aleatorio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lacquer&display=swap');
+body {
+    position: fixed;
+    background: #000;
+    transform: rotate(90deg);  
+    font-family: 'Lacquer', cursive;  
+}
+#video-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+#Video {
+    top: -43vh;
+    left: -3vh;
+    scale: 120%;
+    width: 100%;
+    height: auto;
+    position: fixed;
+}
+#Wellcome {
+    top: 30vh;
+    left: -30vh;
+    width: 150vh;
+    height: 15vh;
+    color: blue;
+    z-index: 8888;
+    display: block;
+    position: fixed;
+    background: #000;
+    text-align: center;
+    align-content: center;
+    animation: Well 12s linear 1 running;
+}
+@keyframes Well {
+    0% {top: -12vh; filter: blur(5px);}
+    15% {top: -12vh; filter: blur(0px);}
+    80% {top: -12vh}
+    90% {top: -12vh}
+    100% {top: 30vh}
+}
+@keyframes Well2 {
+    0% {top: 80vh; filter: blur(5px);}
+    15% {top: 80vh; filter: blur(0px);}
+    80% {top: 80vh}
+    90% {top: 80vh}
+    100% {top: 100vh}
+}
+#Modal {
+    top: -50vh;
+    left: -1vh;
+    width: 100vh;
+    height: 60vh;
+    z-index: 9999;
+    position: fixed;
+    background: transparent;
+}
+#Logo {
+    top: -48vh;
+    left: 83vh;
+    opacity: .4;
+    color: gray;
+    z-index: 9999;
+    font-size: 20px;
+    font-weight: bold;
+    position: fixed;
+}
+</style>
+</head>
+<body>
+      <div id="Modal"></div>  
+   <h1 id="Logo">✖️Tv</h1>
+<div id="video-container">
+    <div id="Video"></div>
+</div>
+<div id="Wellcome">“BIENVENIDO A X-Tv”</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+
+<script>
+    window.onload = function() {
+        var videos = [
+            '878114901',
+            '872236865',
+            '878121736',
+            '878077580',
+            '875398889',
+            '565171606'
+        ];
+
+        function getRandomTime() {
+            return Math.floor(Math.random() * 5400);
+        }
+
+        var randomIndex = Math.floor(Math.random() * videos.length);
+        var randomVideoId = videos[randomIndex];
+
+        var player = new Vimeo.Player('Video', {
+            id: randomVideoId,
+            width: 650,
+            autopause: false,
+            autoplay: true
+        });
+
+        player.on('loaded', function() {
+            var randomTime = getRandomTime();
+            player.setCurrentTime(randomTime).then(function(seconds) {
+                player.play().catch(function(error) {
+                    console.error('Error al reproducir el video:', error);
+                });
+            }).catch(function(error) {
+                console.error('Error al establecer el tiempo de reproducción:', error);
+            });
+        });
+
+        player.on('ended', function() {
+            var newIndex = Math.floor(Math.random() * videos.length);
+            var newRandomVideoId = videos[newIndex];
+            player.loadVideo(newRandomVideoId).then(function() {
+                var randomTime = getRandomTime();
+                player.setCurrentTime(randomTime).then(function(seconds) {
+                    player.play().catch(function(error) {
+                        console.error('Error al reproducir el video:', error);
+                    });
+                }).catch(function(error) {
+                    console.error('Error al establecer el tiempo de reproducción:', error);
+                });
+            }).catch(function(error) {
+                console.error('Error al cargar el video:', error);
+            });
+        });
+    };
+</script>
+       <!-- HORIZONTAL -->
+<script>
+        function handleOrientationChange() {
+            var orientation = (window.innerWidth > window.innerHeight) ? "Horizontal" : "Vertical";
+            
+ document.textContent = `Orientación actual: ${orientation}`;
+            
+            if (orientation === "Horizontal") {
+       <!-- Ejecuta el evento -->
+          evento();    
+  }
+}
+    function evento() {
+  document.body.style.transform = 'rotate(0deg)';      
+  Video.style.scale = '120%';
+  Video.style.top = '10vh';
+  Video.style.left = '3vh';  
+  Wellcome.style.top = '100vh';
+  Wellcome.style.left = '-18vh';
+  Wellcome.style.width = '300vh';
+  Wellcome.style.height = '25vh';
+  Wellcome.style.animation = 'Well2 12s linear 1 running';
+  Modal.style.width = '300vh';
+  Modal.style.height = '100vh';
+  Modal.style.top = '-3vh';
+  Modal.style.left = '-1vh';
+  Logo.style.top = '0vh';
+  Logo.style.left = '210vh';
+}
+        window.addEventListener("resize", handleOrientationChange);
+
+  <!-- Llama a la función al cargar la página para establecer el estado inicial -->
+      handleOrientationChange();
+</script>
+</body>
+</html>
